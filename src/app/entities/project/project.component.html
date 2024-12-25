@@ -1,0 +1,271 @@
+<!-- Sidebar and Main Content Wrapper -->
+<div class="row">
+  <!-- Sidebar -->
+  <div id="sidebar" class="col-auto bg-dark text-white vh-100" [ngClass]="{'collapsed': isSidebarCollapsed}"style="overflow-y: auto;">
+    <div class="d-flex flex-column align-items-stretch pt-3">
+      <!-- Toggle Button -->
+      <button
+        class="btn btn-secondary mb-3 shadow-sm"
+        (click)="toggleSidebar()">
+        &#9776;
+      </button>
+
+      <!-- Button List -->
+      <div class="list-group list-group-flush">
+        <button
+          class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2"
+          (click)="selectAction('create')">
+          Create Project
+        </button>
+        <button
+          class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2"
+          (click)="selectAction('update')">
+          Update Project
+        </button>
+        <button
+          class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2"
+          (click)="selectAction('getOngoing')">
+          Get Ongoing Projects
+        </button>
+        <button
+          class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2"
+          (click)="selectAction('delete')">
+          Delete Project
+        </button>
+        <button
+          class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2"
+          (click)="selectAction('getByDate')">
+          Get Projects by Date
+        </button>
+        <button
+          class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2"
+          (click)="selectAction('getByStatus')">
+          Get Projects by Status
+        </button>
+        <button
+          class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2"
+          (click)="selectAction('getByRole')">
+          Get Projects by User Role
+        </button>
+        <button
+          class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2"
+          (click)="selectAction('getHighPriority')">
+          Get High Priority Projects
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Main Content Area -->
+  <!-- <div class="content-area col " [ngClass]="{'collapsed': isSidebarCollapsed}">
+    <div class="card shadow-lg mb-4">
+         <div class="card-header bg-primary text-white text-center">
+        <h3 class="mb-0">Project CRUD Operations</h3>
+      </div> -->
+
+      <div class="content-area col" [ngClass]="{'collapsed': isSidebarCollapsed}">
+        <div class="card shadow-lg mb-4">
+          <!-- <div class="card-header bg-primary text-white text-center"> -->
+            <div class="card-header" style="background-color: #2d4059; color: white; text-align: center; padding: 10px; border-radius: 8px;">
+            <h3 class="mb-0 header-text">Project CRUD Operations</h3>
+          </div>
+          <div class="card-body">
+              
+    
+      <div class="card-body">
+          <!-- Project Form (For Create, Update, and Delete) -->
+          <form *ngIf="selectedAction === 'create' || selectedAction === 'update'" (ngSubmit)="onFormSubmit()">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="projectId" class="form-label">Project ID</label>
+                <input type="number" class="form-control" id="projectId" [(ngModel)]="project.projectId" name="projectId" required>
+              </div>
+              <div class="col-md-6">
+                <label for="projectName" class="form-label">Project Name</label>
+                <input type="text" class="form-control" id="projectName" [(ngModel)]="project.projectName" name="projectName" required>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" class="form-control" id="description" [(ngModel)]="project.description" name="description" required>
+              </div>
+              <div class="col-md-6">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input type="date" class="form-control" id="startDate" [(ngModel)]="project.startDate" name="startDate" required>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="endDate" class="form-label">End Date</label>
+                <input type="date" class="form-control" id="endDate" [(ngModel)]="project.endDate" name="endDate" required>
+              </div>
+              <div class="col-md-6">
+                <label for="userId" class="form-label">User ID</label>
+                <input type="number" class="form-control" id="userId" [(ngModel)]="project.user.userId" name="userId" required>
+              </div>
+            </div>
+
+            <div class="text-center mb-4">
+              <button type="submit" class="btn btn-success btn-lg" [disabled]="isSubmitDisabled()">Submit</button>
+            </div>
+          </form>
+
+          <!-- Get Projects by Date Range -->
+          <form *ngIf="selectedAction === 'getByDate'" (ngSubmit)="getProjectsInDateRange()">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input type="date" class="form-control" id="startDate" [(ngModel)]="project.startDate" name="startDate" required>
+              </div>
+              <div class="col-md-6">
+                <label for="endDate" class="form-label">End Date</label>
+                <input type="date" class="form-control" id="endDate" [(ngModel)]="project.endDate" name="endDate" required>
+              </div>
+            </div>
+
+            <div class="text-center mb-4">
+              <button type="submit" class="btn btn-primary btn-lg">Get Projects</button>
+            </div>
+          </form>
+
+          <!-- Get Projects by Status -->
+          <form *ngIf="selectedAction === 'getByStatus'" (ngSubmit)="getProjectsByStatus()">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="status" class="form-label">Status</label>
+                <select id="status" class="form-control" [(ngModel)]="status" name="status" required>
+                  <option value="Pending">Pending</option>
+                  <option value="In progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="text-center mb-4">
+              <button type="submit" class="btn btn-primary btn-lg">Get Projects</button>
+            </div>
+          </form>
+
+          <!-- Get Projects by User Role -->
+          <form *ngIf="selectedAction === 'getByRole'" (ngSubmit)="getProjectsByUserRole()">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="roleName" class="form-label">Role Name</label>
+                <input type="text" class="form-control" id="roleName" [(ngModel)]="roleName" name="roleName" required>
+              </div>
+            </div>
+
+            <div class="text-center mb-4">
+              <button type="submit" class="btn btn-primary btn-lg">Get Projects</button>
+            </div>
+          </form>
+
+          <!-- Get Ongoing Projects -->
+          <div *ngIf="selectedAction === 'getOngoing'" class="text-center mb-4">
+            <button class="btn btn-info btn-lg" (click)="getOngoingProjects()">Get Ongoing Projects</button>
+          </div>
+
+          <!-- Get High Priority Projects -->
+          <div *ngIf="selectedAction === 'getHighPriority'" class="text-center mb-4">
+            <button class="btn btn-info btn-lg" (click)="getProjectsWithHighPriority()">Get High Priority Projects</button>
+          </div>
+
+          <!-- Delete Project -->
+          <form *ngIf="selectedAction === 'delete'" (ngSubmit)="deleteProject()">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="projectId" class="form-label">Project ID</label>
+                <input type="number" class="form-control" id="projectId" [(ngModel)]="project.projectId" name="projectId" required>
+              </div>
+            </div>
+
+            <div class="text-center mb-4">
+              <button type="submit" class="btn btn-danger btn-lg">Delete Project</button>
+            </div>
+          </form>
+
+          <!-- Message and Error Messages -->
+          <div *ngIf="message" class="alert alert-info mt-3 text-center">
+            {{ message }}
+          </div>
+
+          <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center">
+            {{ errorMessage }}
+          </div>
+
+          <!-- Projects Table -->
+          <div *ngIf="projectList.length > 0" class="table-responsive mt-4">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Project Name</th>
+                  <th>Description</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let project of projectList">
+                  <td>{{ project.projectName }}</td>
+                  <td>{{ project.description }}</td>
+                  <td>{{ project.startDate | date }}</td>
+                  <td>{{ project.endDate | date }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Styles -->
+<style>
+  /* Sidebar Styling */
+  #sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    transition: width 0.3s ease;
+    z-index: 1000;
+  }
+
+  #sidebar.collapsed {
+    width: 70px;
+  }
+
+  #sidebar.collapsed .list-group-item {
+    text-align: center;
+    padding: 5px 10px;
+  }
+
+  #sidebar .list-group-item {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  #sidebar .list-group-item:hover {
+    background-color: #495057;
+    transform: scale(1.05);
+  }
+
+  #sidebar .list-group-item.active {
+    background-color: #007bff;
+    color: white !important;
+    font-weight: bold;
+    transform: scale(1.1);
+  }
+
+  .content-area {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease;
+  }
+
+  #sidebar.collapsed + .content-area {
+    margin-left: 90px;
+  }
+</style>

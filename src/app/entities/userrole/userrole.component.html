@@ -1,0 +1,125 @@
+ <div class="row">
+  <!-- Sidebar -->
+  <div id="sidebar" class="col-auto bg-dark text-white vh-100" [ngClass]="{'collapsed': isSidebarCollapsed}" style="overflow-y: auto;">
+    <div class="d-flex flex-column align-items-stretch pt-3">
+      <button class="btn btn-secondary mb-3 shadow-sm" (click)="toggleSidebar()">&#9776;</button>
+      <div class="list-group list-group-flush">
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="showForm('create')">Create User Role</button>
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="showForm('update')">Update User Role</button>
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="showForm('getAll')">Get All User Roles</button>
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="showForm('getById')">Get User Role by ID</button>
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="showForm('delete')">Delete User Role</button>
+      </div>
+    </div>
+  </div>
+ 
+ <!-- Main Content Area -->
+<div class="content-area col" [ngClass]="{'collapsed': isSidebarCollapsed}">
+  <div class="card shadow-lg mb-4">
+    <div class="card-header" style="background-color: #2d4059; color: white; text-align: center; padding: 10px; border-radius: 8px;">
+      <h3 class="mb-0">User Role CRUD Operations</h3>
+    </div>
+    <div class="card-body">
+      <!-- Your content goes here -->
+ 
+        <!-- Success and Error Messages -->
+        <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+        <div *ngIf="message" class="alert alert-success">{{ message }}</div>
+ 
+        <!-- Create User Role Form -->
+        <form *ngIf="currentAction === 'create'" (ngSubmit)="createNewUserRole()">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="userRoleId" class="form-label">User Role ID</label>
+              <input type="number" class="form-control" id="userRoleId" [(ngModel)]="userRole.userRoleId" name="userRoleId" required placeholder="Enter User Role ID">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="roleName" class="form-label">Role Name</label>
+              <input type="text" class="form-control" id="roleName" [(ngModel)]="userRole.roleName" name="roleName" required placeholder="Enter Role Name">
+            </div>
+          </div>
+          <div class="text-center mb-4">
+            <button type="submit" class="btn btn-success btn-lg">Create Role</button>
+          </div>
+        </form>
+ 
+        <!-- Update User Role Form -->
+        <form *ngIf="currentAction === 'update'" (ngSubmit)="updateUserRoleDetails()">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="userRoleId" class="form-label">User Role ID</label>
+              <input type="number" class="form-control" id="userRoleId" [(ngModel)]="userRole.userRoleId" name="userRoleId" required placeholder="Enter User Role ID">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="roleName" class="form-label">Role Name</label>
+              <input type="text" class="form-control" id="roleName" [(ngModel)]="userRole.roleName" name="roleName" required placeholder="Enter Role Name">
+            </div>
+          </div>
+          <div class="text-center mb-4">
+            <button type="submit" class="btn btn-primary btn-lg">Update Role</button>
+          </div>
+        </form>
+ 
+        <!-- Get All User Roles -->
+        <div *ngIf="currentAction === 'getAll'">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">User Role ID</th>
+                <th scope="col">Role Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let role of userRoleList">
+                <td>{{ role.userRoleId }}</td>
+                <td>{{ role.roleName }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+ 
+        <!-- Get User Role by ID -->
+        <form *ngIf="currentAction === 'getById'" (ngSubmit)="getUserRoleById()">
+          <div class="mb-3">
+            <input type="number" [(ngModel)]="userRole.userRoleId" class="form-control" name="userRoleId" placeholder="Enter User Role ID to fetch">
+          </div>
+          <button type="submit" class="btn btn-info btn-lg">Get Role</button>
+        </form>
+ 
+        <!-- Display fetched user role in a table after successful fetch -->
+        <div *ngIf="fetchedRole">
+          <h4 class="mt-4">Fetched User Role</h4>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">User Role ID</th>
+                <th scope="col">Role Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ fetchedRole.userRoleId }}</td>
+                <td>{{ fetchedRole.roleName }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+ 
+        <!-- Delete User Role -->
+        <form *ngIf="currentAction === 'delete'" (ngSubmit)="deleteUserRoleById(userRole.userRoleId)">
+          <div class="mb-3">
+            <input type="number" [(ngModel)]="userRole.userRoleId" class="form-control" name="userRoleId" placeholder="Enter User Role ID to delete">
+          </div>
+          <button type="submit" class="btn btn-danger btn-lg">Delete Role</button>
+        </form>
+ 
+      </div>
+    </div>
+  </div>
+</div>
+ 
+ 

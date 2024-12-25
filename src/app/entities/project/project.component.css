@@ -1,0 +1,14 @@
+.heading{
+    color: #2d4059;
+}
+
+.card-header{
+    background-color: #2d4059;
+}
+.bg-primary {
+    background-color: #2d4059 !important; /* Replace with your desired dark blue color */
+}
+
+.header-text {
+    color: #2d4059;
+}

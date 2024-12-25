@@ -1,0 +1,355 @@
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0px;
+  border-bottom: 1px solid #eaeaea;
+}
+.header img {
+  height: 40px;
+}
+.header nav {
+  display: flex;
+  gap: 20px;
+}
+.header nav a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.header nav a:hover {
+  color: white;
+  transform: scale(1.1);
+}
+.header .cta {
+  background-color: #0A3981;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.header .cta:hover {
+  background-color: #0A3981;
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px 0;
+  width: 100%;
+  max-width: 1200px;
+}
+.main .text {
+  max-width: 500px;
+  animation: fadeIn 1s ease-in-out;
+}
+.main .text h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+.main .text p {
+  font-size: 18px;
+  color: #666;
+  margin: 20px 0;
+}
+.main .text .reviews {
+  display: none;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: #666;
+}
+.main .text .reviews i {
+  color: #f5c518;
+}
+.main .image {
+  max-width: 600px;
+  position: relative;
+  animation: slideIn 1s ease-out;
+}
+.main .image img {
+  width: 100%;
+  border-radius: 10px;
+}
+.main .image .phone {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 200px;
+  transform: rotate(-10deg);
+}
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+@keyframes slideIn {
+  from {
+      transform: translateX(100%);
+      opacity: 0;
+  }
+  to {
+      transform: translateX(0);
+      opacity: 1;
+  }
+}
+@media (max-width: 768px) {
+  .main {
+      flex-direction: column;
+      text-align: center;
+  }
+  .main .image {
+      margin-top: 20px;
+  }
+  .main .image .phone {
+      position: static;
+      transform: none;
+      margin-top: 20px;
+  }
+}
+.taskifylogo{
+  /* clip-path: circle(50% at 50% 50%); */
+border-radius: 50%;
+  scale: 1.5;
+}
+
+
+
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+}
+
+/* Flashcards Section */
+.container {
+  padding: 10px 20px;
+}
+
+.container h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: #333;
+  text-shadow: #555;
+}
+
+.container p {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.flashcard-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+/* Flashcard Styles */
+.flashcard {
+  width: 280px;
+  height: 350px;
+  perspective: 1000px; /* Enables 3D perspective */
+}
+
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.flashcard:hover .flashcard-inner {
+  transform: rotateY(180deg); /* Flips the card */
+}
+
+.flashcard-front, .flashcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.flashcard-front {
+  background-color: #D4EBF8;
+}
+
+.flashcard-back {
+  background-color: #0A3981;
+  color: white;
+  transform: rotateY(180deg);
+}
+
+.flashcard i {
+  font-size: 3rem;
+  color: #28a745;
+  margin-bottom: 15px;
+}
+
+.flashcard h4 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.flashcard p {
+  color: white;
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* Chatbot Button */
+.chatbot-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+   background-color:#28a745;
+   color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.bi-chat-dots:hover{
+  background-color: #0056b3;
+  transform: scale(2x);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.chatbot-btn i :hover{
+  font-size: 1.5rem;
+  animation: bounce 1.5s infinite;
+  transform: (2x);
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+  }
+  40% {
+      transform: translateY(-10px);
+  }
+  60% {
+      transform: translateY(-5px);
+  }
+}
+
+/* Footer Section */
+footer {
+  background-color: #0A3981;
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+footer a {
+  color: #ffc107;
+  text-decoration: none;
+}
+
+footer .about-us h1 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .services .service-item {
+    flex: 1 1 100%;
+    margin-bottom: 20px;
+  }
+
+  .text-content h1 {
+    font-size: 2em;
+  }
+
+  footer .about-us h1 {
+    font-size: 1.2em;
+  }
+}
+
+.service-item:hover .hello{
+  visibility: visible;
+}
+
+.hello{
+  visibility: hidden;
+}
+.bullet-points {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.bullet-points li {
+  font-size: 1em;
+  color: #333;
+}
+
+/* Chatbot */
+.chatbot {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 15px;
+  border-radius: 50%;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chatbot-logo {
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+  mix-blend-mode: color-burn;
+}
+

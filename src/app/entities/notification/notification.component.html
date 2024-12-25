@@ -1,0 +1,199 @@
+<!-- Sidebar and Main Content Wrapper -->
+<div class="row">
+  <!-- Sidebar -->
+  <div id="sidebar" class="col-auto bg-dark text-white vh-100" [ngClass]="{'collapsed': isSidebarCollapsed}" style="overflow-y: auto;">
+    <div class="d-flex flex-column align-items-stretch pt-3">
+      <!-- Toggle Button -->
+      <button class="btn btn-secondary mb-3 shadow-sm" (click)="toggleSidebar()">&#9776;</button>
+ 
+      <!-- Button List -->
+      <div class="list-group list-group-flush">
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="selectAction('create')">
+          Create Notification
+        </button>
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="selectAction('update')">
+          Update Notification
+        </button>
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="selectAction('getById')">
+          Get Notification by ID
+        </button>
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="selectAction('delete')">
+          Delete Notification
+        </button>
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="getListOfAllNotifications()">
+          Get All Notifications
+        </button>
+      </div>
+    </div>
+  </div>
+ 
+ <!-- Main Content Area -->
+<div class="content-area col" [ngClass]="{'collapsed': isSidebarCollapsed}">
+  <div class="card shadow-lg mb-4">
+    <div class="card-header" style="background-color: #2d4059; color: white; text-align: center; padding: 10px; border-radius: 8px;">
+      <h3 class="mb-0">Notification Management</h3>
+    </div>
+    <div class="card-body">
+      <!-- Your content goes here -->
+        <!-- Create Notification -->
+        <form *ngIf="selectedAction === 'create'" (ngSubmit)="onFormSubmit()">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="notificationId" class="form-label">Notification ID</label>
+              <input type="number" class="form-control" id="notificationId" [(ngModel)]="notification.notificationId" name="notificationId" required>
+            </div>
+            <div class="col-md-6">
+              <label for="text" class="form-label">Notification Text</label>
+              <input type="text" class="form-control" id="text" [(ngModel)]="notification.text" name="text" required>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="createdAt" class="form-label">Created At</label>
+              <input type="datetime-local" class="form-control" id="createdAt" [(ngModel)]="notification.createdAt" name="createdAt" required>
+            </div>
+            <div class="col-md-6">
+              <label for="userId" class="form-label">User ID</label>
+              <input type="number" class="form-control" id="userId" [(ngModel)]="notification.user.userId" name="userId" required>
+            </div>
+          </div>
+          <div class="text-center mb-4">
+            <button type="submit" class="btn btn-success btn-lg" [disabled]="isSubmitDisabled()">Create Notification</button>
+          </div>
+        </form>
+ 
+        <!-- Update Notification -->
+        <form *ngIf="selectedAction === 'update'" (ngSubmit)="onFormSubmit()">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="notificationId" class="form-label">Notification ID</label>
+              <input type="number" class="form-control" id="notificationId" [(ngModel)]="notification.notificationId" name="notificationId" required>
+            </div>
+            <div class="col-md-6">
+              <label for="text" class="form-label">Notification Text</label>
+              <input type="text" class="form-control" id="text" [(ngModel)]="notification.text" name="text" required>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="createdAt" class="form-label">Created At</label>
+              <input type="datetime-local" class="form-control" id="createdAt" [(ngModel)]="notification.createdAt" name="createdAt" required>
+            </div>
+            <div class="col-md-6">
+              <label for="userId" class="form-label">User ID</label>
+              <input type="number" class="form-control" id="userId" [(ngModel)]="notification.user.userId" name="userId" required>
+            </div>
+          </div>
+          <div class="text-center mb-4">
+            <button type="submit" class="btn btn-warning btn-lg" [disabled]="isSubmitDisabled()">Update Notification</button>
+          </div>
+        </form>
+ 
+        <!-- Get Notification by ID -->
+        <form *ngIf="selectedAction === 'getById'" (ngSubmit)="onFormSubmit()">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="notificationId" class="form-label">Notification ID</label>
+              <input type="number" class="form-control" id="notificationId" [(ngModel)]="notification.notificationId" name="notificationId" required>
+            </div>
+          </div>
+          <div class="text-center mb-4">
+            <button type="submit" class="btn btn-primary btn-lg" [disabled]="isSubmitDisabled()">Get Notification</button>
+          </div>
+        </form>
+ 
+        <!-- Delete Notification -->
+        <form *ngIf="selectedAction === 'delete'" (ngSubmit)="onFormSubmit()">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="notificationId" class="form-label">Notification ID</label>
+              <input type="number" class="form-control" id="notificationId" [(ngModel)]="notification.notificationId" name="notificationId" required>
+            </div>
+          </div>
+          <div class="text-center mb-4">
+            <button type="submit" class="btn btn-danger btn-lg" [disabled]="isSubmitDisabled()">Delete Notification</button>
+          </div>
+        </form>
+ 
+        <!-- Message and Error Messages -->
+        <div *ngIf="message" class="alert alert-info text-center">
+          {{ message }}
+        </div>
+ 
+        <!-- Notification List -->
+        <div *ngIf="notificationList.length > 0" class="table-responsive mt-4">
+          <h4>Notifications List</h4>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Notification ID</th>
+                <th>Text</th>
+                <th>Created At</th>
+                <th>User ID</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let notification of notificationList">
+                <td>{{ notification.notificationId }}</td>
+                <td>{{ notification.text }}</td>
+                <td>{{ notification.createdAt | date:'short' }}</td>
+                <td>{{ notification.userId }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+ 
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- Styles -->
+<style>
+  /* Sidebar Styling */
+  #sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    transition: width 0.3s ease;
+    z-index: 1000;
+  }
+ 
+  #sidebar.collapsed {
+    width: 70px;
+  }
+ 
+  #sidebar.collapsed .list-group-item {
+    text-align: center;
+    padding: 5px 10px;
+  }
+ 
+  #sidebar .list-group-item {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+ 
+  #sidebar .list-group-item:hover {
+    background-color: #495057;
+    transform: scale(1.05);
+  }
+ 
+  #sidebar .list-group-item.active {
+    background-color: #007bff;
+    color: white !important;
+    font-weight: bold;
+    transform: scale(1.1);
+  }
+ 
+  .content-area {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease;
+  }
+ 
+  #sidebar.collapsed + .content-area {
+    margin-left: 90px;
+  }
+</style>
+ 
+ 

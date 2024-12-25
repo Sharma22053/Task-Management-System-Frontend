@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskify Dashboard</title>
+</head>
+<body>
+    <div class="d-flex ps-4 pt-2 pe-2 justify-content-between bgColor text-light"> 
+        <a href="/employee"><img class="taskifylogo p-1" alt="Taskify logo" src="https://storage.googleapis.com/a1aa/image/8c599361-3448-4a34-b120-d2de54a86fa8.jpeg" width="80px"/></a>
+        <h2>User Dashboard</h2>
+        <div class="header" (click)="dropDown()">
+            <div class="profile-button">
+                <img src="https://th.bing.com/th/id/OIP.6Q8RT0hh7ld6AaJeoZb_MAHaHa?w=500&h=500&rs=1&pid=ImgDetMain" alt="icon" width="40px" style="border-radius: 100%;">
+            </div>
+            <div class="profile-data text-dark" [ngStyle]="{display: isDropDownOpen?'block': 'none'}">
+              <h5 class="ms-2 mt-2">Hello, {{user.fullName}}</h5>
+              <p class="d-flex justify-content-start ms-2"><strong>Role Name: {{user.roleName}}</strong></p>
+              <hr>
+              <li class="li-elements"><a class="text-decoration-none text-Color" href="#">&nbsp;Settings</a></li>
+              <li class="li-elements"><a class="text-decoration-none text-Color" routerLink="/contact">&nbsp;Help</a></li>
+              <li class="li-elements bg-danger" (click)="onLogout()"><a class="text-decoration-none text-Color">&nbsp;Sign Out</a></li>
+            </div>
+        </div>
+    </div>
+    <div class="toggle-sidebar" (click)="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </div>
+    <div class="content" id="content">
+        <div class="cardContainer" (click)="navigated()">
+            <!-- Cards -->
+            <div class="card pt-4" [ngClass]="isClicked ? 'reSized' : ''" (click)="getProjects()">
+                <img src="https://th.bing.com/th/id/OIP.wI8h3v8yqgwS6uTYO76ktAHaHa?rs=1&pid=ImgDetMain" alt="Card 3">
+                <p>Projects</p>
+            </div>
+            <div class="card" [ngClass]="isClicked ? 'reSized' : ''" (click)="getTasks()">
+                <img src="https://th.bing.com/th?id=OIP.c43anRoehYjRgQlB3CVqgQHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2" alt="Card 1">
+                <p>Tasks</p>
+            </div>
+            <div class="card" [ngClass]="isClicked ? 'reSized' : ''" (click)="getNotifications()">
+                <img src="https://th.bing.com/th/id/OIP.YIofTBBFMCK9BR0M47VNhwHaHa?w=177&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt="Card 2">
+                <p>Notifications</p>
+            </div>
+            <div class="card" [ngClass]="isClicked ? 'reSized' : ''" (click)="getComments()">
+                <img src="https://th.bing.com/th/id/OIP.5wtHhuokxNoMnX22ip-V6QAAAA?w=158&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt="Card 3">
+                <p>Comments</p>
+            </div>
+            <div class="card pt-5" [ngClass]="isClicked ? 'reSized' : ''" (click)="getAttachments()">
+                <img src="https://th.bing.com/th/id/OIP.uJx-HCcb4KXcyTyeC4E15wHaF7?w=223&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt="Card 3">
+                <p>Attachments<p>
+            </div>   <div class="card" [ngClass]="isClicked ? 'reSized' : ''" (click)="getCategories()">
+                <img src="data:image/jpeg;base64,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" alt="Card 3">
+                <p>Categories</p>
+            </div>  
+        </div>
+    </div>
+   <div [ngStyle]="{display: isClicked ? 'block':'none'}" [ngSwitch]="switchCaseToDisplay">
+    <table class="table table-bordered" *ngSwitchCase="'task'">
+        <thead>
+          <tr>
+            <th scope="col">Priority</th>
+            <th scope="col">Status</th>
+            <th scope="col">Due Date</th>
+            <th scope="col">Task Id</th>
+            <th scope="col">Task Name</th>
+            <th scope="col">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of tasks">
+            <td>{{task.priority}}</td>
+            <td>{{task.status}}</td>
+            <td>{{task.dueDate}}</td>
+            <td>{{task.taskId}}</td>
+            <td>{{task.taskName}}</td>
+            <td>{{task.description}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table" *ngSwitchCase="'project'">
+        <thead>
+          <tr>
+            <th scope="col">Project ID</th>
+            <th scope="col">Project Name</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let project of projects">
+            <td>{{project.projectId}}</td>
+            <td>{{project.projectName}}</td>
+            <td>{{project.startDate}}</td>
+            <td>{{project.endDate}}</td>
+            <td>{{project.description}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table" *ngSwitchCase="'notification'">
+        <thead>
+          <tr>
+            <th scope="col">Text</th>
+            <th scope="col">User Id</th>
+            <th scope="col">Notification Id</th>
+            <th scope="col">Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let notification of notifications">
+            <td>{{notification.text}}</td>
+            <td>{{notification.userId}}</td>
+            <td>{{notification.notificationId}}</td>
+            <td>{{notification.createdAt}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+      <table class="table" *ngSwitchCase="'comment'">
+        <thead>
+          <tr>
+            <th scope="col">Task Id</th>
+            <th scope="col">Text</th>
+            <th scope="col">User Id</th>
+            <th scope="col">Created At</th>
+            <th scope="col">Comment Id</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let comment of comments">
+            <td>{{comment.taskId}}</td>
+            <td>{{comment.text}}</td>
+            <td>{{comment.userId}}</td>
+            <td>{{comment.createdAt}}</td>
+            <td>{{comment.commentId}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table" *ngSwitchCase="'attachments'">
+        <thead>
+          <tr>
+            <th scope="col">Task Id</th>
+            <th scope="col">Attachment ID</th>
+            <th scope="col">File Name</th>
+            <th scope="col">File Path</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let attachment of attachments">
+            <td>{{attachment.taskId}}</td>
+            <td>{{attachment.attachmentId}}</td>
+            <td>{{attachment.fileName}}</td>
+            <td>{{attachment.filePath}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table" *ngSwitchCase="'categories'">
+        <thead>
+          <tr>
+            <th scope="col">Category ID</th>
+            <th scope="col">Category Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let categorie of categories">
+            <td>{{categorie.categoryId}}</td>
+            <td>{{categorie.categoryName}}</td>
+          </tr>
+        </tbody>
+      </table>
+   </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script>
+        // Sidebar Toggle
+        document.getElementById('toggleSidebar').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.toggle('shrink');
+            document.getElementById('content').classList.toggle('shrink');
+            this.classList.toggle('shrink');
+        });
+    </script>
+</body>
+</html>

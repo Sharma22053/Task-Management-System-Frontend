@@ -1,0 +1,234 @@
+<div *ngIf="message" class="alert alert-info mt-3 text-center">
+  {{ message }}
+</div>
+ 
+<div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center">
+  {{ errorMessage }}
+</div>
+ 
+
+<div class="row">
+    <!-- Sidebar -->
+    <div id="sidebar" class="col-auto bg-dark text-white vh-100" [ngClass]="{'collapsed': isSidebarCollapsed}" style="overflow-y: auto;">
+      <div class="d-flex flex-column align-items-stretch pt-3">
+        <!-- Toggle Button -->
+        <button class="btn btn-secondary mb-3 shadow-sm" (click)="toggleSidebar()">
+          &#9776;
+        </button>
+ 
+        <!-- Button List -->
+        <div class="list-group list-group-flush">
+          <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="setAction('create')">
+            Create Comment
+          </button>
+          <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="setAction('update')">
+            Update Comment
+          </button>
+          <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="setAction('getById')">
+            Get Comment by ID
+          </button>
+          <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="setAction('delete')">
+            Delete Comment
+          </button>
+          <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="getListOfComments()">
+            Get All Comments
+          </button>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- Main Content Area -->
+<div class="content-area col" [ngClass]="{'collapsed': isSidebarCollapsed}">
+  <div class="card shadow-lg mb-4">
+    <div class="card-header" style="background-color: #2d4059; color: white; text-align: center; padding: 10px; border-radius: 8px;">
+      <h3 class="mb-0">Comments and Feedback Management</h3>
+    </div>
+    <div class="card-body">
+      <!-- Your content here -->
+          <!-- Comment Form (For Create, Update, and Delete) -->
+          <form *ngIf="currentAction === 'create' || currentAction === 'update'" (ngSubmit)="handleAction()">
+            <div class="row mb-3" *ngIf="showField('commentId')">
+              <div class="col-md-6">
+                <label for="commentId" class="form-label">Comment ID</label>
+                <input type="number" class="form-control" id="commentId" [(ngModel)]="comment.commentId" name="commentId" required ="currentAction === 'update'">
+              </div>
+            </div>
+ 
+            <div class="row mb-3">
+              <div class="col-md-6" *ngIf="showField('text')">
+                <label for="text" class="form-label">Comment Text</label>
+                <textarea class="form-control" id="text" [(ngModel)]="comment.text" name="text" required></textarea>
+              </div>
+            </div>
+ 
+            <div class="row mb-3" *ngIf="showField('createdAt')">
+              <div class="col-md-6">
+                <label for="createdAt" class="form-label">Created At</label>
+                <input type="datetime-local" class="form-control" id="createdAt" [(ngModel)]="comment.createdAt" name="createdAt" required>
+              </div>
+            </div>
+ 
+            <div class="row mb-3" *ngIf="showField('userId')">
+              <div class="col-md-6">
+                <label for="userId" class="form-label">User ID</label>
+                <input type="number" class="form-control" id="userId" [(ngModel)]="comment.user.userId" name="userId" required>
+              </div>
+            </div>
+ 
+            <div class="row mb-3" *ngIf="showField('taskId')">
+              <div class="col-md-6">
+                <label for="taskId" class="form-label">Task ID</label>
+                <input type="number" class="form-control" id="taskId" [(ngModel)]="comment.task.taskId" name="taskId" required>
+              </div>
+            </div>
+ 
+            <div class="text-center mb-4">
+              <button type="submit" class="btn btn-success btn-lg" [disabled]="!comment.text || !comment.user.userId || !comment.task.taskId">
+                Submit
+              </button>
+            </div>
+          </form>
+
+          
+ 
+          <!-- Get Comment by ID -->
+          <form *ngIf="currentAction === 'getById'" (ngSubmit)="getCommentByCommentId()">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="commentId" class="form-label">Comment ID</label>
+                <input type="number" class="form-control" id="commentId" [(ngModel)]="comment.commentId" name="commentId" required>
+              </div>
+            </div>
+ 
+            <div class="text-center mb-4">
+              <button type="submit" class="btn btn-primary btn-lg">Get Comment</button>
+            </div>
+          </form>
+
+         
+ 
+ 
+          <!-- Delete Comment -->
+          <form *ngIf="currentAction === 'delete'" (ngSubmit)="deleteComment()">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="commentId" class="form-label">Comment ID</label>
+                <input type="number" class="form-control" id="commentId" [(ngModel)]="comment.commentId" name="commentId" required>
+              </div>
+            </div>
+ 
+            <div class="text-center mb-4">
+              <button type="submit" class="btn btn-danger btn-lg">Delete Comment</button>
+            </div>
+          </form>
+ 
+          <!-- Comments List -->
+          <div *ngIf="commentList.length > 0" class="table-responsive mt-4">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Comment ID</th>
+                  <th>Text</th>
+                  <th>Created At</th>
+                  <th>User ID</th>
+                  <th>Task ID</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let comment of commentList">
+                  <td>{{ comment.commentId }}</td>
+                  <td>{{ comment.text }}</td>
+                  <td>{{ comment.createdAt | date: 'short' }}</td>
+                  <td>{{ comment.userId }}</td>
+                  <td>{{ comment.taskId }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+           <!-- Display the comment when fetched -->
+<div *ngIf="isSubmitted && comment.commentId">
+  <h3>Comment Details</h3>
+  <p><strong>Comment ID:</strong> {{ comment.commentId }}</p>
+  <p><strong>Text:</strong> {{ comment.text }}</p>
+  <p><strong>Created At:</strong> {{ comment.createdAt | date: 'medium' }}</p>
+  <p><strong>User ID:</strong> {{ comment.userId }}</p>
+  <p><strong>Task ID:</strong> {{ comment.taskId }}</p>
+</div>       <!-- Sidebar and Main Content Wrapper -->
+
+          
+          <!-- Message Display -->
+          <div *ngIf="message" class="alert alert-info mt-3 text-center">
+            {{ message }}
+          </div>
+ 
+          <!-- Error Message Display -->
+          <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center">
+            {{ errorMessage }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+            
+ 
+  <!-- Styles -->
+  <style>
+    /* Sidebar Styling */
+    #sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 250px;
+      transition: width 0.3s ease;
+      z-index: 1000;
+    }
+ 
+    #sidebar.collapsed {
+      width: 70px;
+    }
+ 
+    #sidebar.collapsed .list-group-item {
+      text-align: center;
+      padding: 5px 10px;
+    }
+ 
+    #sidebar .list-group-item {
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+ 
+    #sidebar .list-group-item:hover {
+      background-color: #495057;
+      transform: scale(1.05);
+    }
+ 
+    #sidebar .list-group-item.active {
+      background-color: #007bff;
+      color: white !important;
+      font-weight: bold;
+      transform: scale(1.1);
+    }
+ 
+    .content-area {
+      margin-left: 250px;
+      transition: margin-left 0.3s ease;
+    }
+ 
+    #sidebar.collapsed + .content-area {
+      margin-left: 90px;
+    }
+
+    /* Comment Details Styling */
+.comment-details {
+  flex: 1; /* Take the remaining width */
+  margin-left: 10px; /* Add spacing between sidebar and comment details */
+  padding: 20px;
+  background-color: #f8f9fa; /* Light gray background */
+  border: 1px solid #ddd; /* Border for better visibility */
+  border-radius: 5px;
+  height: 100vh;
+  overflow-y: auto; /* Scroll if content overflows */
+}
+  </style>
+ 

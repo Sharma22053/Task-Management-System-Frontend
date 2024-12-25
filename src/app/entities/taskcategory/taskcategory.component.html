@@ -1,0 +1,174 @@
+ <!-- Sidebar and Main Content Wrapper -->
+<div class="row">
+  <!-- Sidebar -->
+  <div id="sidebar" class="col-auto bg-dark text-white vh-100" [ngClass]="{'collapsed': isSidebarCollapsed}" style="overflow-y: auto;">
+    <div class="d-flex flex-column align-items-stretch pt-3">
+      <!-- Toggle Button -->
+      <button class="btn btn-secondary mb-3 shadow-sm" (click)="toggleSidebar()">&#9776;</button>
+ 
+      <!-- Button List -->
+      <div class="list-group list-group-flush">
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="selectAction('associate')">
+          Associate Task with Categories
+        </button>
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="selectAction('getCategories')">
+          Get Categories by Task
+        </button>
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="selectAction('getTasks')">
+          Get Tasks by Category
+        </button>
+      </div>
+    </div>
+  </div>
+ 
+ <!-- Main Content Area -->
+<div class="content-area col" [ngClass]="{'collapsed': isSidebarCollapsed}">
+  <div class="card shadow-lg mb-4">
+    <div class="card-header" style="background-color: #2d4059; color: white; text-align: center; padding: 10px; border-radius: 8px;">
+      <h3 class="mb-0">Task Management</h3>
+    </div>
+    <div class="card-body">
+      <!-- Your content goes here -->
+      <div class="card-body">
+        <!-- Associate Task with Categories -->
+        <form *ngIf="selectedAction === 'associate'" (ngSubmit)="associateTaskWithCategories()">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="taskId" class="form-label">Task ID</label>
+              <input type="number" class="form-control" id="taskId" [(ngModel)]="taskCategory.taskId" name="taskId" required>
+            </div>
+            <div class="col-md-6">
+              <label for="categoryIds" class="form-label">Category IDs</label>
+              <input type="text" class="form-control" id="categoryIds" [(ngModel)]="taskCategory.categoryIds" name="categoryIds" required>
+              <small class="form-text text-muted">Enter multiple category IDs separated by commas.</small>
+            </div>
+          </div>
+          <div class="text-center mb-4">
+            <button type="submit" class="btn btn-success btn-lg">Associate Task</button>
+          </div>
+        </form>
+ 
+        <!-- Get Categories by Task -->
+        <form *ngIf="selectedAction === 'getCategories'" (ngSubmit)="getCategoriesForTask()">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="taskId" class="form-label">Task ID</label>
+              <input type="number" class="form-control" id="taskId" [(ngModel)]="taskId" name="taskId" required>
+            </div>
+          </div>
+          <div class="text-center mb-4">
+            <button type="submit" class="btn btn-primary btn-lg">Get Categories</button>
+          </div>
+        </form>
+ 
+        <!-- Get Tasks by Category -->
+        <form *ngIf="selectedAction === 'getTasks'" (ngSubmit)="getTasksForCategory()">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="categoryId" class="form-label">Category ID</label>
+              <input type="number" class="form-control" id="categoryId" [(ngModel)]="categoryId" name="categoryId" required>
+            </div>
+          </div>
+          <div class="text-center mb-4">
+            <button type="submit" class="btn btn-primary btn-lg">Get Tasks</button>
+          </div>
+        </form>
+ 
+        <!-- Message and Error Messages -->
+        <div *ngIf="loading" class="alert alert-info text-center">
+          Loading, please wait...
+        </div>
+ 
+        <div *ngIf="categoryList.length > 0" class="table-responsive mt-4">
+          <h4>Categories for Task</h4>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Category ID</th>
+                <th>Category Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let category of categoryList">
+                <td>{{ category.categoryId }}</td>
+                <td>{{ category.categoryName }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+ 
+        <div *ngIf="taskList.length > 0" class="table-responsive mt-4">
+          <h4>Tasks for Category</h4>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Task ID</th>
+                <th>Task Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let task of taskList">
+                <td>{{ task.taskId }}</td>
+                <td>{{ task.taskName }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+ 
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center">
+          {{ errorMessage }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- Styles -->
+<style>
+  /* Sidebar Styling */
+  #sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    transition: width 0.3s ease;
+    z-index: 1000;
+  }
+ 
+  #sidebar.collapsed {
+    width: 70px;
+  }
+ 
+  #sidebar.collapsed .list-group-item {
+    text-align: center;
+    padding: 5px 10px;
+  }
+ 
+  #sidebar .list-group-item {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+ 
+  #sidebar .list-group-item:hover {
+    background-color: #495057;
+    transform: scale(1.05);
+  }
+ 
+  #sidebar .list-group-item.active {
+    background-color: #007bff;
+    color: white !important;
+    font-weight: bold;
+    transform: scale(1.1);
+  }
+ 
+  .content-area {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease;
+  }
+ 
+  #sidebar.collapsed + .content-area {
+    margin-left: 90px;
+  }
+</style>
+ 
+ 

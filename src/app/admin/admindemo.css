@@ -1,0 +1,75 @@
+.navbar {
+    background: linear-gradient(90deg, #1C4E80, #0056b3);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative; /* Added to position profile button */
+  }
+
+  .navbar-brand {
+    color: white !important;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+  .navbar-nav .nav-link {
+    color: white !important;
+    font-weight: 500;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .navbar-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #f8f9fa !important;
+  }
+
+  /* Active Button Styling */
+  .navbar-nav .nav-link.active {
+    background-color: #0056b3 !important;
+    color: white !important;
+    border-radius: 5px;
+  }
+
+  /* Profile Button */
+  .profile-btn {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10; /* Make sure it's clickable */
+  }
+
+  /* Profile Dropdown */
+  .profile-dropdown {
+    position: absolute;
+    top: 45px;
+    right: 15px;
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 200px;
+    padding: 10px;
+    display: block;
+    z-index: 9; /* Behind the button */
+  }
+
+  .profile-dropdown p {
+    margin: 0;
+  }
+
+  .profile-dropdown button {
+    width: 100%;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 0;
+    cursor: pointer;
+  }
+
+  .profile-dropdown button:hover {
+    background-color: #c82333;
+  }
+  

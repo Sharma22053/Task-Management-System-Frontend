@@ -1,0 +1,112 @@
+ <!-- Sidebar and Main Content Wrapper -->
+<div class="row">
+  <!-- Sidebar -->
+  <div id="sidebar" class="col-auto bg-dark text-white vh-100" [ngClass]="{'collapsed': isSidebarCollapsed}" style="overflow-y: auto;">
+    <div class="d-flex flex-column align-items-stretch pt-3">
+      <!-- Toggle Button -->
+      <button class="btn btn-secondary mb-3 shadow-sm" (click)="toggleSidebar()">
+        &#9776;
+      </button>
+ 
+      <!-- Button List -->
+      <div class="list-group list-group-flush">
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="selectAction('create')">
+          Upload Attachment
+        </button>
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="selectAction('update')">
+          Update Attachment
+        </button>
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="selectAction('getById')">
+          Get Attachment by ID
+        </button>
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="selectAction('delete')">
+          Delete Attachment
+        </button>
+        <button class="list-group-item list-group-item-action bg-dark text-white border-0 rounded-1 shadow-sm mb-2" (click)="selectAction('getAll')">
+          Get All Attachments
+        </button>
+      </div>
+    </div>
+  </div>
+ 
+ <!-- Main Content Area -->
+<div class="content-area col" [ngClass]="{'collapsed': isSidebarCollapsed}">
+  <div class="card shadow-lg mb-4">
+    <div class="card-header" style="background-color: #2d4059; color: white; text-align: center;">
+      <h3 class="mb-0">File and Document Management</h3>
+    </div>
+    <div class="card-body">
+        <!-- Attachments Form and Operations -->
+        <form *ngIf="selectedAction === 'create' || selectedAction === 'update'" (ngSubmit)="onFormSubmit()">
+          <div class="form-group">
+            <label for="fileName">File Name</label>
+            <input type="text" id="fileName" class="form-control" [(ngModel)]="attachment.fileName" name="fileName" required>
+          </div>
+          <div class="form-group">
+            <label for="filePath">File Path</label>
+            <input type="text" id="filePath" class="form-control" [(ngModel)]="attachment.filePath" name="filePath" required>
+          </div>
+          <div class="form-group">
+            <label for="taskId">Task ID</label>
+            <input type="number" id="taskId" class="form-control" [(ngModel)]="attachment.task.taskId" name="taskId" required>
+          </div>
+ 
+          <!-- Attachment ID Field for Create and Update Operation -->
+          <div *ngIf="selectedAction === 'create' || selectedAction === 'update'" class="form-group">
+            <label for="attachmentId">Attachment ID (Optional for Update)</label>
+            <input type="number" id="attachmentId" class="form-control" [(ngModel)]="attachment.attachmentId" name="attachmentId">
+          </div>
+ 
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmitDisabled()">Submit</button>
+        </form>
+ 
+        <!-- Get by ID Form -->
+        <div *ngIf="selectedAction === 'getById'">
+          <div class="form-group">
+            <label for="attachmentId">Attachment ID</label>
+            <input type="number" id="attachmentId" class="form-control" [(ngModel)]="attachment.attachmentId" name="attachmentId" required>
+          </div>
+          <button class="btn btn-primary" (click)="getAttachmentById()">Get Attachment</button>
+        </div>
+ 
+        <!-- Delete Attachment Form -->
+        <div *ngIf="selectedAction === 'delete'">
+          <div class="form-group">
+            <label for="deleteAttachmentId">Attachment ID</label>
+            <input type="number" id="deleteAttachmentId" class="form-control" [(ngModel)]="attachment.attachmentId" name="deleteAttachmentId" required>
+          </div>
+          <button class="btn btn-danger" (click)="deleteAttachment()">Delete Attachment</button>
+        </div>
+ 
+        <!-- Attachments List -->
+        <div *ngIf="attachmentList.length > 0" class="table-responsive mt-4">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Attachment ID</th>
+                <th>File Name</th>
+                <th>File Path</th>
+                <th>Task ID</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let attachment of attachmentList">
+                <td>{{ attachment.attachmentId }}</td>
+                <td>{{ attachment.fileName }}</td>
+                <td>{{ attachment.filePath }}</td>
+                <td>{{ attachment.taskId }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+ 
+        <!-- Success/Failure Messages -->
+        <div *ngIf="message" class="alert alert-info mt-3 text-center">
+          {{ message }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+ 
